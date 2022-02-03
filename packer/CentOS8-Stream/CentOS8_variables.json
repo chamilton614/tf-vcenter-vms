@@ -1,0 +1,20 @@
+{
+  "vcenter_server": "vcenter01.home",
+  "vsphere_username": "administrator@vcenter01.home",
+  "vsphere_password": "P@ssw0rd",
+  "datastore": "datastore2",
+  "host": "esxhost01.home",
+  "datacenter": "Datacenter",
+  "folder": "Templates",
+  "cluster": "Cluster",
+  "network": "Non-OCP",
+  "boot_wait": "5s",
+  "boot_iso": "[datastore2] ISOs/Linux/CentOS-Stream-8-x86_64-20220121-boot.iso",
+  "guest_os_type": "centos8_64guest",
+  "memsize": "2048",
+  "numvcpus": "2",
+  "disk_size": "61440",
+  "ssh_password" : "root",
+  "ssh_username" : "server",
+  "vm_name": "tpl_Centos8Stream2"
+}
