@@ -62,7 +62,7 @@ build {
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash -eux '{{ .Path }}'" # This runs the scripts with sudo
     scripts = [
-      "scripts/cockpit.sh"
+      "scripts/cockpit.sh",
       "scripts/package_updates.sh"
     ]
   }
