@@ -1,13 +1,6 @@
 
 # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/performing_an_advanced_rhel_installation/kickstart-commands-and-options-reference_installing-rhel-as-an-experienced-user
 
-
-# Install a fresh new system (deprecated) no longer needed added
-# install
-
-# License agreement - optional but added for completeness
-eula --agreed
-
 # Specify installation method to use for installation
 # To use a different one comment out the 'url' one below, update
 # the selected choice with proper options & un-comment it
@@ -24,10 +17,10 @@ text
 firstboot --disable
 
 # Keyboard layout
-keyboard --vckeymap=us --xlayouts='us'
+keyboard us
 
 # Set language to use during installation and the default language to use on the installed system (required)
-lang en_US.UTF-8
+lang en_US
 
 # Configure network information for target system and activate network devices in the installer environment (optional)
 # --onboot	enable device at a boot time
@@ -54,7 +47,7 @@ rootpw --iscrypted $6$rhel6usgcb$aS6oPGXcPKp3OtFArSrhRwu6sN8q2.yEGY7AIwDOQd23YCt
 # Add a user that can login and escalate privileges
 # Plaintext password is: admin123
 # Username:Password - admin:admin123
-#user --name=admin --groups=wheel --password=$6$Ga6ZnIlytrWpuCzO$q0LqT1USHpahzUafQM9jyHCY9BiE5/ahXLNWUMiVQnFGblu0WWGZ1e6icTaCGO4GNgZNtspp1Let/qpM7FMVB0 --iscrypted
+user --name=admin --groups=wheel --password=$6$Ga6ZnIlytrWpuCzO$q0LqT1USHpahzUafQM9jyHCY9BiE5/ahXLNWUMiVQnFGblu0WWGZ1e6icTaCGO4GNgZNtspp1Let/qpM7FMVB0 --iscrypted
 
 # Configure firewall settings for the system (optional)
 # --enabled	reject incoming connections that are not in response to outbound requests
@@ -83,7 +76,7 @@ skipx
 # In Red Hat Enterprise Linux 8, time zone names are validated using the pytz.all_timezones list, 
 # provided by the pytz package.
 # East Coast EST - America/New_York
-timezone --utc America/New_York
+timezone America/New_York --isUtc
 
 # Add a user named packer
 user --groups=wheel --name=packer --password=$6$Jaa5U0EwAPMMp3.5$m29yTwr0q9ZJVJGMXvOnm9q2z13ldUFTjB1sxPHvaiW4upMSwQ50181wl7SjHjh.BTH7FGHx37wrX..SM0Bqq. --iscrypted --gecos="packer"
@@ -140,7 +133,7 @@ autopart --type=lvm
 reboot
 
 # Packages selection (%packages section is required)
-%packages --ignoremissing
+%packages
 # Require @Base
 # @Base
 # @core
