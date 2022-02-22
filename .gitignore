@@ -1,3 +1,7 @@
+###############
+# Packer
+###############
+
 # Cache Objects
 packer_cache/
 
@@ -14,3 +18,13 @@ crash.log
 
 # Ignore ISO files
 *.iso
+
+##############
+# Terraform
+##############
+
+#Terraform Provider directory
+.terraform/*
+
+#Terraform Lock File
+.terraform.*
