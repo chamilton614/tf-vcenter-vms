@@ -1,18 +1,23 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
-source "vsphere-iso" "rhcentos" {
-  CPUs                 = "${var.numvcpus}"
-  CPU_hot_plug         = true
-  RAM                  = "${var.memsize}"
-  RAM_hot_plug         = true
-  RAM_reserve_all      = false
-  boot_command         = [
+
+source "null" "pre-build" {
+  communicator = "none"
+}
+
+source "vsphere-iso" "rhel" {
+  CPUs            = "${var.numvcpus}"
+  CPU_hot_plug    = true
+  RAM             = "${var.memsize}"
+  RAM_hot_plug    = true
+  RAM_reserve_all = false
+  boot_command = [
     #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.kickstart_config} <enter>"
     # Workaround to use Packer as a local webserver since RHEL8 removed Floppy drivers, could use CD paths but this works easily
-    "<up><wait><tab><wait> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+    "<up><wait><tab><wait> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/scripts/ks.cfg<enter><wait>"
   ]
-  boot_order           = "disk,cdrom,floppy"
-  boot_wait            = "${var.boot_wait}"
+  boot_order = "disk,cdrom,floppy"
+  boot_wait  = "${var.boot_wait}"
   #cd_files             = ["./${var.kickstart_config}"]
   #cd_label             = "OEMDRV"
   cluster              = "${var.cluster}"
@@ -24,11 +29,17 @@ source "vsphere-iso" "rhcentos" {
   folder               = "${var.folder}"
   guest_os_type        = "${var.guest_os_type}"
   insecure_connection  = "true"
-  iso_paths            = ["${var.boot_iso}"]
+  #Use iso_paths for Datastores
+  #iso_paths            = ["${var.boot_iso}"]
+  iso_url              = "${var.boot_iso}"
+  #iso_checksum         = "${var.boot_iso_checksum}"
+  iso_checksum         = "{{user `boot_iso_checksum`}}"
+
   network_adapters {
     network      = "${var.network}"
     network_card = "vmxnet3"
   }
+
   notes            = "Built via Packer ${legacy_isotime("2022-02-03 00:00:00")}"
   password         = "${var.vsphere_password}"
   remove_cdrom     = "true"
@@ -45,18 +56,43 @@ source "vsphere-iso" "rhcentos" {
   username       = "${var.vsphere_username}"
   vcenter_server = "${var.vcenter_server}"
   vm_name        = "${var.vm_name}"
-  http_directory = "scripts"
+  http_directory = "package"
+}
+
+locals {
+  checksum = ""
 }
 
 # a build block invokes sources and runs provisioning steps on them. The
 # documentation for build blocks can be found here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/build
 build {
+
+  # Update the Name field in the build logs
+  name    = "template"
+
   # use the `name` field to name a build in the logs.
   # For example this present config will display
   # "buildname.amazon-ebs.example-1" and "buildname.amazon-ebs.example-2"
-  name = "rhcentos"
-  sources = ["source.vsphere-iso.rhcentos"]
+  
+  source "source.null.pre-build" {}
+
+  #source "source.vsphere-iso.rhel" {
+  #  name    = "rhel8"
+  #}
+
+  #sources = ["source.null.pre-build","source.vsphere-iso.rhel"]
+
+  provisioner "shell-local" {
+    only = ["null.pre-build"]
+    inline = [
+      "export checksum = cat ${var.boot_iso_checksum}",
+      #"export CHECKSUM=$(pwd)",
+      #"export CHECKSUM=$(cat {{user 'pwd'}}/'${var.boot_iso_checksum}')",
+      #"echo $CHECKSUM"
+      "echo $checksum"
+    ]
+  }
 
   #Execute Additional Package scripts
   /* provisioner "shell" {
@@ -73,9 +109,10 @@ build {
 
   #Execute Cleanup
   provisioner "shell" {
+    only = ["vsphere-iso.rhel8"]
     execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash '{{ .Path }}'"
     scripts = [
-      "scripts/cleanup.sh"
+      "package/scripts/cleanup.sh"
     ]
   }
 

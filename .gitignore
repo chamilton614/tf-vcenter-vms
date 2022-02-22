@@ -1,8 +1,16 @@
 # Cache Objects
 packer_cache/
 
+#.DS_Store Objects
+.DS_Store
+#*/.DS_Store
+#*/*/.DS_Store
+
 # Crash log
 crash.log
 
 # For built boxes
 *.box
+
+# Ignore ISO files
+*.iso
