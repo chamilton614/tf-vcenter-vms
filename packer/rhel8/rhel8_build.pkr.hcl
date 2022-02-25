@@ -75,24 +75,24 @@ build {
   # For example this present config will display
   # "buildname.amazon-ebs.example-1" and "buildname.amazon-ebs.example-2"
   
-  source "source.null.pre-build" {}
+  #source "source.null.pre-build" {}
 
-  #source "source.vsphere-iso.rhel" {
-  #  name    = "rhel8"
-  #}
+  source "source.vsphere-iso.rhel" {
+    name    = "rhel8"
+  }
 
   #sources = ["source.null.pre-build","source.vsphere-iso.rhel"]
 
-  provisioner "shell-local" {
-    only = ["null.pre-build"]
-    inline = [
-      "export checksum = cat ${var.boot_iso_checksum}",
-      #"export CHECKSUM=$(pwd)",
-      #"export CHECKSUM=$(cat {{user 'pwd'}}/'${var.boot_iso_checksum}')",
-      #"echo $CHECKSUM"
-      "echo $checksum"
-    ]
-  }
+  #provisioner "shell-local" {
+  #  only = ["null.pre-build"]
+  #  inline = [
+  #    "export checksum = cat ${var.boot_iso_checksum}",
+  #    #"export CHECKSUM=$(pwd)",
+  #    #"export CHECKSUM=$(cat {{user 'pwd'}}/'${var.boot_iso_checksum}')",
+  #    #"echo $CHECKSUM"
+  #    "echo $checksum"
+  #  ]
+  #}
 
   #Execute Additional Package scripts
   /* provisioner "shell" {
