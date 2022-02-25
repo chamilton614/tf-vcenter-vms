@@ -89,9 +89,19 @@ variable "ssh_username" {
   description = "ssh login username for post-install"
 }
 
+variable "os_type" {
+  type        = string
+  description = "os type"
+}
+
+variable "os_version" {
+  type        = string
+  description = "os version"
+}
+
 variable "vm_name" {
   type        = string
-  description = "name of the vm"
+  description = "name of the vm with os_type and os_version appended to it"
 }
 
 variable "kickstart_config" {

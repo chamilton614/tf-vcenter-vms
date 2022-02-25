@@ -54,7 +54,7 @@ source "vsphere-iso" "rhel" {
   }
   username       = "${var.vsphere_username}"
   vcenter_server = "${var.vcenter_server}"
-  vm_name        = "${var.vm_name}"
+  vm_name        = "${var.vm_name}${var.os_type}_${var.os_version}"
   http_directory = "package"
 }
 
