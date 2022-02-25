@@ -32,8 +32,7 @@ source "vsphere-iso" "rhel" {
   #Use iso_paths for Datastores
   #iso_paths            = ["${var.boot_iso}"]
   iso_url              = "${var.boot_iso}"
-  #iso_checksum         = "${var.boot_iso_checksum}"
-  iso_checksum         = "{{user `boot_iso_checksum`}}"
+  iso_checksum         = "${var.boot_iso_checksum}"
 
   network_adapters {
     network      = "${var.network}"
