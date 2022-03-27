@@ -1,9 +1,14 @@
 #!/bin/bash -eux
 
-echo "cleanup.sh"
+echo 'cleanup.sh'
 
-#Remove Ansible
-#pip3 uninstall -y ansible
+#Check if Pip3 is installed
+if [ command -v pip3 >/dev/null 2>&1 ]
+then
+    echo 'pip3 is installed.  Removing ansible.'
+    #Remove Ansible
+    pip3 uninstall -y ansible
+fi
 
 #Clean up Yum
 yum clean all

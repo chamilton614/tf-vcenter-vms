@@ -30,7 +30,7 @@ data "vsphere_compute_cluster" "cluster" {
 
 data "vsphere_network" "network" {
   #https://www.terraform.io/docs/providers/vsphere/d/network.html
-  name          = var.portgroup
+  name          = var.network
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
@@ -60,7 +60,7 @@ resource "vsphere_virtual_machine" "vm" {
   disk {
     label            = "disk0"
     size             = data.vsphere_virtual_machine.template.disks.0.size
-    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
+    #eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
     thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
 
@@ -74,18 +74,16 @@ resource "vsphere_virtual_machine" "vm" {
         domain    = var.domain_name
       }
 
-      #This example uses DHCP. To switch to static IP addresses, comment the line below...
-      network_interface {}
+      #This uses DHCP. To switch to Static IP address, comment out this section and uncomment the section below.
+      #network_interface {}
 
-      #... and uncomment this bloc
-      /*
+      #This uses Static IP. To switch to DHCP address, comment out this section and uncomment the section above.
       network_interface {
         ipv4_address = var.vm_ip
         ipv4_netmask = var.vm_cidr
-    }
+      }
       ipv4_gateway = var.default_gw
-      dns_server_list = ["1.2.3.4"]
-    */
+      #dns_server_list = [var.name_servers]
 
     }
 

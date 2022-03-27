@@ -1,3 +1,7 @@
 # tf-vcenter-vms
-Generate a Kickstart Config file here - https://access.redhat.com/labs/kickstartconfig/
-`packer build -var-file=CentOS8_variables.json CentOS8_build.json`
+
+## Packer
+How to use Packer [HERE](https://gitlab.aimspecialtyhealth.com/CHamilton/tf-vcenter-vms/tree/master/packer)
+
+## Terraform
+How to use Terraform [HERE](https://gitlab.aimspecialtyhealth.com/CHamilton/tf-vcenter-vms/tree/master/terraform)
