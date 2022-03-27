@@ -2,8 +2,8 @@
 #https://github.com/jonhowe/Virtjunkie.com/tree/master/Terraform
 
 vsphere_server = "vcenter01.home"
-#vsphere_user = "domain\\user"
-#vsphere_password = "somepassword"
+vsphere_user = "administrator@vcenter01.home"
+vsphere_password = "P@ssw0rd"
 
 adminpassword = "packer" 
 datacenter = "Datacenter"

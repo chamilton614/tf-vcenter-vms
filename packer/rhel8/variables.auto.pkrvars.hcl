@@ -1,8 +1,8 @@
 
 
 vcenter_server="vcenter01.home"
-#vsphere_username="administrator@vcenter01.home"
-#vsphere_password="P@ssw0rd"
+vsphere_username="administrator@vcenter01.home"
+vsphere_password="P@ssw0rd"
 # Use vcenter_host if a network variable below is not going to be specified
 #vsphere_host="sdcpiesx714.white.aim.local"
 
