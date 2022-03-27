@@ -85,8 +85,7 @@ resource "vsphere_virtual_machine" "vm" {
       dns_server_list = [var.name_servers]
       ipv4_gateway = var.default_gw
       */
-      dns_server_list = [var.name_servers]
-      ipv4_gateway = var.default_gw
+  
     }
 
   }
