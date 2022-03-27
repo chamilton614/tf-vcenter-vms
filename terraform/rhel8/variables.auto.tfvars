@@ -16,7 +16,7 @@ vm_name = "tpl-rhel8-test"
 domain_name = "home"
 #Ignored the following 4 lines if DHCP used
 vm_ip = "192.168.2.253"
-vm_cidr = 24
+vm_cidr = 23
 default_gw = "192.168.2.1"
 name_servers = "192.168.2.1,1.1.1.1"
 
