@@ -75,16 +75,16 @@ resource "vsphere_virtual_machine" "vm" {
       }
 
       #This uses DHCP. To switch to Static IP address, comment out this section and uncomment the section below.
-      #network_interface {}
+      network_interface {}
 
       #This uses Static IP. To switch to DHCP address, comment out this section and uncomment the section above.
-      network_interface {
+      /*network_interface {
         ipv4_address = var.vm_ip
         ipv4_netmask = var.vm_cidr
       }
+      dns_server_list = [var.name_servers]
       ipv4_gateway = var.default_gw
-      #dns_server_list = [var.name_servers]
-
+      */
     }
 
   }
