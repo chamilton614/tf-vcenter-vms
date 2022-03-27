@@ -3,7 +3,7 @@
 echo "cleanup.sh"
 
 #Remove Ansible
-pip3 uninstall -y ansible
+#pip3 uninstall -y ansible
 
 #Clean up Yum
 yum clean all

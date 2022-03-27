@@ -14,7 +14,7 @@ source "vsphere-iso" "rhel" {
   boot_command = [
     #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.kickstart_config} <enter>"
     # Workaround to use Packer as a local webserver since RHEL8 removed Floppy drivers, could use CD paths but this works easily
-    "<up><wait><tab><wait> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/scripts/ks.cfg<enter><wait>"
+    "<up><wait><tab><wait> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/scripts/ks.cfg<enter><wait>"
   ]
   boot_order = "disk,cdrom,floppy"
   boot_wait  = "${var.boot_wait}"
@@ -94,21 +94,21 @@ build {
   #}
 
   #Execute Additional Package scripts
-  /* provisioner "shell" {
-    execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash -eux '{{ .Path }}'" # This runs the scripts with sudo
-    scripts = [
-      "scripts/package_updates.sh"
-    ]
-  } */
+  #provisioner "shell" {
+  #  execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash -eux '{{ .Path }}'" # This runs the scripts with sudo
+  #  scripts = [
+  #    "package/scripts/package_updates.sh"
+  #  ]
+  #}
 
   #Final Customizations
-  /* provisioner "ansible-local" {
-    playbook_file = "scripts/setup.yml"
-  } */
+  #provisioner "ansible-local" {
+  #  playbook_file = "package/scripts/setup.yml"
+  #}
 
   #Execute Cleanup
   provisioner "shell" {
-    only = ["vsphere-iso.rhel8"]
+    #only = ["vsphere-iso.rhel"]
     execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash '{{ .Path }}'"
     scripts = [
       "package/scripts/cleanup.sh"
