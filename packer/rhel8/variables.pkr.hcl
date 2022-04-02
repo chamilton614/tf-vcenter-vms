@@ -1,8 +1,51 @@
 # Declared variables.
+variable "vcenter_server" {
+    type = string
+    description = "vcenter server"
+}
+
+variable "vsphere_username" {
+    type = string
+    description = "vcenter username"
+    sensitive = true
+}
+
+variable "vsphere_password" {
+    type = string
+    description = "vcenter password"
+    sensitive = true
+}
+
+variable "datastore" {
+    type = string
+    description = "vcenter datastore"
+}
+
+variable "vsphere_host" {
+    type = string
+    description = "vSphere/esxi host"
+    # Default value is formality for auto vars.  Do not remove
+    default = ""
+}
+
+variable "datacenter" {
+    type = string
+    description = "vcenter datacenter name"
+}
+
+variable "folder" {
+    type = string
+    description = "folder for the templates"
+}
+
+variable "cluster" {
+    type = string
+    description = "vcenter cluster name"
+}
 
 variable "network" {
     type = string
-    description = "network type for the vm"
+    description = "vcenter network for the vm"
     # Default value is formality for auto vars.  Do not remove
     default = ""
 }
@@ -28,27 +71,22 @@ variable "guest_os_type" {
 }
 
 variable "memsize" {
-    type = int
+    type = string
     description = "size of memory for the vm"
 }
 
 variable "numvcpus" {
-    type = int
+    type = string
     description = "number of cpus for the vm"
 }
 
-variable "numvcpucores" {
-    type = int
-    description = "number of cpu cores for the vm"
-}
-
 variable "disk_size_primary" {
-    type = uint
+    type = string
     description = "size of the primary disk for the vm"
 }
 
 variable "disk_size_secondary" {
-    type = uint
+    type = string
     description = "size of the secondary disk for the vm"
 }
 

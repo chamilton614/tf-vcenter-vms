@@ -1,10 +1,17 @@
 
 
+vcenter_server="SDCpiinfvc3.white.aim.local"
+#vsphere_username=""
+#vsphere_password=""
+# Use vcenter_host if a network variable below is not going to be specified
+#vsphere_host="sdcpiesx714.white.aim.local"
 
-# Network type - hostonly, nat, bridged
-network="bridged"
-
-
+cluster="SDC-NPD"
+datacenter="SDC-NPD-DC"
+# Use network if a vcenter_host variable above is not going to be specified
+network="wht-lnx-infra-npd"
+datastore="SDC-NPD-vsan"
+folder="Templates"
 
 boot_wait="30s"
 
@@ -26,13 +33,10 @@ boot_iso_checksum = "package/iso/rhel-8.4-checksum.txt"
 guest_os_type="rhel8_64Guest"
 
 # CPUs
-numvcpus=2
-
-# CPU Cores
-numvcpucores=1
+numvcpus="2"
 
 # RAM 4GB = 4096
-memsize=4096
+memsize="4096"
 
 # Storage - primary and secondary.  Must have at least a value for primary.  Secondary can be ignored with or without a value if only using 1 drive just update build file.
 # 40GB = 40960 60GB = 61440
