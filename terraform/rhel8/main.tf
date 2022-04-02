@@ -57,16 +57,20 @@ resource "vsphere_virtual_machine" "vm" {
     adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
+  wait_for_guest_net_timeout = 10
+
   disk {
     label            = "disk0"
     size             = data.vsphere_virtual_machine.template.disks.0.size
-    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
+    #eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
     thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
 
   clone {
     template_uuid = data.vsphere_virtual_machine.template.id
 
+    #Customize section appears to have issues in RHEL8 changing name and using DHCP from Packer VM template
+    #Commented out section below to fix the issue, so computer name will need to be handled by a separate script.
     customize {
       #https://www.terraform.io/docs/providers/vsphere/r/virtual_machine.html#linux-customization-options
       linux_options {
@@ -85,7 +89,7 @@ resource "vsphere_virtual_machine" "vm" {
       dns_server_list = [var.name_servers]
       ipv4_gateway = var.default_gw
       */
-  
+  #
     }
 
   }

@@ -12,8 +12,8 @@ cluster = "Cluster"
 network = "Non-OCP" 
 
 template_name = "tpl_rhel8"
-vm_name = "tpl-rhel8-test" 
-domain_name = "home"
+vm_name = "rhel8test" 
+domain_name = "local"
 #Ignored the following 4 lines if DHCP used
 vm_ip = "192.168.2.253"
 vm_cidr = 23

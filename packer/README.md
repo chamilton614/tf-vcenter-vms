@@ -9,7 +9,7 @@ Requirements:
  - VM Network to use
  - Temporary IP Information - ip, subnet mask, gateway
 
-1. Clone this [Repo](https://github.com/chamilton614/tf-vcenter-vms.git)
+1. Clone this [Repo](https://github.com/chamilton614/tf-workstation-vms.git)
 2. Browse to the packer/rhel8 directory
 3. Update variables.auto.pkrvars.hcl
 4. Run packer_build.sh
