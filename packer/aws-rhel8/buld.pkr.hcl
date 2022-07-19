@@ -9,7 +9,9 @@ source "amazon-ebs" "rhel" {
     
   ssh_username     = var.ssh_username
   #ssh_password     = var.ssh_password
-
+  #subnet_id         = "subnet-0eab4bee6941a26a3"
+  #security_group_ids = ["sg-08ebe96c6ff846548"]
+  ssh_timeout      = "10m"
   # VM Information
   ami_name         = "${var.vm_name}-${local.timestamp}"
   instance_type    = var.vm_instance_type
