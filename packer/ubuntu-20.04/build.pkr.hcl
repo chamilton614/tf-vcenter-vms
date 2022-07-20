@@ -1,15 +1,15 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
-source "vsphere-iso" "rhcentos" {
+source "vsphere-iso" "ubuntu" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
   RAM                  = "${var.memsize}"
   RAM_hot_plug         = true
   RAM_reserve_all      = false
   boot_command         = [
-    #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.kickstart_config} <enter>"
-    # Workaround to use Packer as a local webserver since RHEL8 removed Floppy drivers, could use CD paths but this works easily
-    "<up><wait><tab><wait> inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
+    "<enter><enter><f6><esc><wait> ",
+    "autoinstall net.ifnames=0 biosdevname=0 ip=dhcp ds=nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ",
+    "<enter>"
   ]
   boot_order           = "disk,cdrom,floppy"
   boot_wait            = "${var.boot_wait}"
@@ -29,7 +29,7 @@ source "vsphere-iso" "rhcentos" {
     network      = "${var.network}"
     network_card = "vmxnet3"
   }
-  notes            = "Built via Packer ${legacy_isotime("2022-02-03 00:00:00")}"
+  notes            = "Built via Packer ${timestamp()}"
   password         = "${var.vsphere_password}"
   remove_cdrom     = "true"
   resource_pool    = ""
@@ -45,7 +45,7 @@ source "vsphere-iso" "rhcentos" {
   username       = "${var.vsphere_username}"
   vcenter_server = "${var.vcenter_server}"
   vm_name        = "${var.vm_name}"
-  http_directory = "scripts"
+  http_directory = "package/scripts"
 }
 
 # a build block invokes sources and runs provisioning steps on them. The
@@ -55,28 +55,28 @@ build {
   # use the `name` field to name a build in the logs.
   # For example this present config will display
   # "buildname.amazon-ebs.example-1" and "buildname.amazon-ebs.example-2"
-  name = "rhcentos"
-  sources = ["source.vsphere-iso.rhcentos"]
+  name = "linux"
+  sources = ["source.vsphere-iso.ubuntu"]
 
   #Execute Additional Package scripts
-  provisioner "shell" {
-    execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash -eux '{{ .Path }}'" # This runs the scripts with sudo
-    scripts = [
-      "scripts/package_updates.sh",
-      "scripts/cockpit.sh"
-    ]
-  }
+  #provisioner "shell" {
+  #  execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash -eux '{{ .Path }}'" # This runs the scripts with sudo
+  #  scripts = [
+  #    "package/scripts/package_updates.sh",
+  #    "package/scripts/cockpit.sh"
+  #  ]
+  #}
 
   #Final Customizations
-  provisioner "ansible-local" {
-    playbook_file = "scripts/setup.yml"
-  }
+  #provisioner "ansible-local" {
+  #  playbook_file = "package/scripts/setup.yml"
+  #}
 
   #Execute Cleanup
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash '{{ .Path }}'"
     scripts = [
-      "scripts/cleanup.sh"
+      "package/scripts/cleanup.sh"
     ]
   }
 

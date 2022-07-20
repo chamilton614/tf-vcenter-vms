@@ -1,16 +1,16 @@
 
 
-vcenter_server="SDCpiinfvc3.white.aim.local"
+vcenter_server="vcenter01.home"
 #vsphere_username=""
 #vsphere_password=""
 # Use vcenter_host if a network variable below is not going to be specified
 #vsphere_host="sdcpiesx714.white.aim.local"
 
-cluster="SDC-NPD"
-datacenter="SDC-NPD-DC"
+cluster="Cluster"
+datacenter="Datacenter"
 # Use network if a vcenter_host variable above is not going to be specified
-network="wht-lnx-infra-npd"
-datastore="SDC-NPD-vsan"
+network="Non-OCP"
+datastore="datastore2"
 folder="Templates"
 
 boot_wait="30s"

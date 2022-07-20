@@ -7,11 +7,13 @@ variable "vcenter_server" {
 variable "vsphere_username" {
     type = string
     description = "vcenter username"
+    sensitive = true
 }
 
 variable "vsphere_password" {
     type = string
     description = "vcenter password"
+    sensitive = true
 }
 
 variable "datastore" {

@@ -1,6 +1,6 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
-source "vsphere-iso" "centos-stream" {
+source "vsphere-iso" "rhcentos" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
   RAM                  = "${var.memsize}"
@@ -55,8 +55,8 @@ build {
   # use the `name` field to name a build in the logs.
   # For example this present config will display
   # "buildname.amazon-ebs.example-1" and "buildname.amazon-ebs.example-2"
-  name = "linux"
-  sources = ["source.vsphere-iso.centos-stream"]
+  name = "rhcentos"
+  sources = ["source.vsphere-iso.rhcentos"]
 
   #Execute Additional Package scripts
   provisioner "shell" {
