@@ -1,19 +1,19 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
-source "vsphere-iso" "rhcentos" {
+source "vsphere-iso" "centos" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
   RAM                  = "${var.memsize}"
   RAM_hot_plug         = true
   RAM_reserve_all      = false
   boot_command         = [
-    #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.kickstart_config} <enter>"
+    #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.install_config} <enter>"
     # Workaround to use Packer as a local webserver since RHEL8 removed Floppy drivers, could use CD paths but this works easily
     "<up><wait><tab><wait> inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
   ]
   boot_order           = "disk,cdrom,floppy"
   boot_wait            = "${var.boot_wait}"
-  #cd_files             = ["./${var.kickstart_config}"]
+  #cd_files             = ["./${var.install_config}"]
   #cd_label             = "OEMDRV"
   cluster              = "${var.cluster}"
   convert_to_template  = "true"
@@ -55,8 +55,8 @@ build {
   # use the `name` field to name a build in the logs.
   # For example this present config will display
   # "buildname.amazon-ebs.example-1" and "buildname.amazon-ebs.example-2"
-  name = "rhcentos"
-  sources = ["source.vsphere-iso.rhcentos"]
+  name = "linux"
+  sources = ["source.vsphere-iso.centos"]
 
   #Execute Additional Package scripts
   provisioner "shell" {

@@ -91,8 +91,8 @@ variable "vm_name" {
     description = "name of the vm"
 }
 
-variable "kickstart_config" {
+variable "install_config" {
     type = string
-    description = "name of the kickstart file"
+    description = "name of the install file"
 }
 

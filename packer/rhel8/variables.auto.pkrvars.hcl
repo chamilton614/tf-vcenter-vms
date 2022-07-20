@@ -50,5 +50,5 @@ ssh_password="packer"
 # VM Name for the Template
 vm_name="tpl_rhel8"
 
-# Name of Kickstart File to use for auto installation
-kickstart_config="ks.cfg"
+# Name of Install File to use for auto installation
+install_config="ks.cfg"

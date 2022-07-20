@@ -32,7 +32,7 @@ source "vsphere-iso" "rhel" {
   }
 
   boot_command         = [
-    #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.kickstart_config} <enter>"
+    #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.install_config} <enter>"
     # Workaround to use Packer as a local webserver since RHEL8 removed Floppy drivers, could use CD paths but this works easily
     #"<up><wait><tab><wait> text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
     "<up><wait><tab><wait> inst.text inst.ks=cdrom<enter><wait>"
@@ -90,7 +90,7 @@ build {
   # use the `name` field to name a build in the logs.
   # For example this present config will display
   # "buildname.amazon-ebs.example-1" and "buildname.amazon-ebs.example-2"
-  name = "template"
+  name = "linux"
   sources = ["source.vsphere-iso.rhel"]
 
   #Execute Additional Package scripts

@@ -13,7 +13,7 @@ source "vsphere-iso" "ubuntu" {
   ]
   boot_order           = "disk,cdrom,floppy"
   boot_wait            = "${var.boot_wait}"
-  #cd_files             = ["./${var.kickstart_config}"]
+  #cd_files             = ["./${var.install_config}"]
   #cd_label             = "OEMDRV"
   cluster              = "${var.cluster}"
   convert_to_template  = "true"
