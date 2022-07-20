@@ -16,7 +16,12 @@ source "vsphere-iso" "ubuntu" {
   #cd_files             = ["./${var.install_config}"]
   #cd_label             = "OEMDRV"
   cluster              = "${var.cluster}"
-  convert_to_template  = "true"
+  content_library_destination {
+    destroy = var.library_vm_destroy
+    library = var.content_library_destination
+    name = var.template_library_name
+  }
+  convert_to_template  = "false"
   create_snapshot      = "true"
   datacenter           = "${var.datacenter}"
   datastore            = "${var.datastore}"
