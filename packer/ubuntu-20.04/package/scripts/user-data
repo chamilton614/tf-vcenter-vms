@@ -1,4 +1,5 @@
 #cloud-config
+# After a manual ubuntu server install the autoinstall user-data file can be found at /var/log/installer/autoinstall-user-data
 autoinstall:
   version: 1
   
@@ -10,18 +11,18 @@ autoinstall:
   locale: en_US.UTF-8
 
   keyboard:
-    layout: en
-    variant: us
+    layout: us
+    variant: ''
 
   network:
     network:
       version: 2
       ethernets:
         eth0: 
-          dhcp4: yes
+          dhcp4: true
   
   ssh:
-    install-server: yes
+    install-server: true
   
   identity:
     hostname: ubuntu
@@ -34,7 +35,7 @@ autoinstall:
   
   packages: 
     - open-vm-tools
-    - openssh-server
+    - git
     - chrony
     - curl
     - vim
