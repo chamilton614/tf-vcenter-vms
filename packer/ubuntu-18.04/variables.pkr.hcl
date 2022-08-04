@@ -91,6 +91,21 @@ variable "vm_name" {
     description = "name of the vm"
 }
 
+variable "content_library_destination" {
+   type = string
+   default =   "Images"
+}
+
+variable "template_library_name" {
+    type = string
+    description = "name of the vm template"
+}
+
+variable "library_vm_destroy" {
+   type = bool
+   default = true
+}
+
 variable "install_config" {
     type = string
     description = "name of the install file"

@@ -34,6 +34,7 @@ variable "datacenter" {
 variable "folder" {
     type = string
     description = "folder for the templates"
+    default = "Templates"
 }
 
 variable "cluster" {
@@ -86,9 +87,24 @@ variable "ssh_username" {
     description = "ssh login username for post-install"
 }
 
-variable "vm_name" {
+variable "content_library_destination" {
+   type = string
+   default =   "Images"
+}
+
+variable "template_vm_name" {
     type = string
-    description = "name of the vm"
+    description = "name of the vm template"
+}
+
+variable "library_vm_destroy" {
+   type = bool
+   default = true
+}
+
+variable "ovf_template" {
+    type = bool
+    default = true
 }
 
 variable "install_config" {

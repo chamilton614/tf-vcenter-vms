@@ -1,5 +1,10 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
+
+locals {
+    timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
 source "vsphere-iso" "ubuntu" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
@@ -16,7 +21,12 @@ source "vsphere-iso" "ubuntu" {
   #cd_files             = ["./${var.install_config}"]
   #cd_label             = "OEMDRV"
   cluster              = "${var.cluster}"
-  convert_to_template  = "true"
+  content_library_destination {
+    destroy = var.library_vm_destroy
+    library = var.content_library_destination
+    name = var.template_library_name
+  }
+  convert_to_template  = "false"
   create_snapshot      = "true"
   datacenter           = "${var.datacenter}"
   datastore            = "${var.datastore}"
@@ -44,7 +54,7 @@ source "vsphere-iso" "ubuntu" {
   }
   username       = "${var.vsphere_username}"
   vcenter_server = "${var.vcenter_server}"
-  vm_name        = "${var.vm_name}"
+  vm_name        = "${var.vm_name}-${local.timestamp}"
   http_directory = "package/scripts"
 }
 

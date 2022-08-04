@@ -1,5 +1,10 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
+
+locals {
+    timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
 source "vsphere-iso" "ubuntu" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
@@ -16,12 +21,19 @@ source "vsphere-iso" "ubuntu" {
   #cd_files             = ["./${var.install_config}"]
   #cd_label             = "OEMDRV"
   cluster              = "${var.cluster}"
-  content_library_destination {
-    destroy = var.library_vm_destroy
-    library = var.content_library_destination
-    name = var.template_library_name
-  }
-  convert_to_template  = "false"
+
+  # Used to store VM Templates in a vCenter Content Library
+  # Uncomment this section to use a Content Library
+  #content_library_destination {
+  #  destroy = var.library_vm_destroy
+  #  library = var.content_library_destination
+  #  name = var.template_vm_name
+  #  ovf = var.ovf_template
+  #}
+  
+  # Create Template - set to false if using a content library
+  convert_to_template  = "true"
+  
   create_snapshot      = "true"
   datacenter           = "${var.datacenter}"
   datastore            = "${var.datastore}"
@@ -49,7 +61,8 @@ source "vsphere-iso" "ubuntu" {
   }
   username       = "${var.vsphere_username}"
   vcenter_server = "${var.vcenter_server}"
-  vm_name        = "${var.vm_name}"
+  #vm_name        = "${var.template_vm_name}-${local.timestamp}"
+  vm_name        = "${var.template_vm_name}"
   http_directory = "package/scripts"
 }
 

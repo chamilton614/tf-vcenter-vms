@@ -1,5 +1,10 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
+
+locals {
+    timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
 source "vsphere-iso" "centos" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
@@ -44,7 +49,7 @@ source "vsphere-iso" "centos" {
   }
   username       = "${var.vsphere_username}"
   vcenter_server = "${var.vcenter_server}"
-  vm_name        = "${var.vm_name}"
+  vm_name        = "${var.vm_name}-${local.timestamp}"
   http_directory = "package/scripts"
 }
 

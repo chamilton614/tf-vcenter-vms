@@ -1,22 +1,56 @@
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
+
+locals {
+    timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
 source "vsphere-iso" "ubuntu" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
   RAM                  = "${var.memsize}"
   RAM_hot_plug         = true
   RAM_reserve_all      = false
+  
+  #boot_command         = [
+  #  "<enter><enter><f6><esc><wait> ",
+  #  "autoinstall net.ifnames=0 biosdevname=0 ip=dhcp ds=nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ",
+  #  "<enter>"
+  #]
+
   boot_command         = [
-    "<enter><enter><f6><esc><wait> ",
-    "autoinstall net.ifnames=0 biosdevname=0 ip=dhcp ds=nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ",
-    "<enter>"
+     " <wait> <wait> <wait> <wait> <wait>",
+     "c",
+     "<wait>",
+     "set gfxpayload=keep",
+     "<enter><wait>",
+     "linux /casper/vmlinuz quiet<wait>",
+     " autoinstall<wait> net.ifnames=0 biosdevname=0 ip=dhcp ds=nocloud-net<wait>",
+     "\\;s=http://<wait>{{ .HTTPIP }}<wait>:{{ .HTTPPort }}/<wait> ---",
+     "<enter><wait>",
+     "initrd /casper/initrd<wait>",
+     "<enter><wait>",
+     "boot<enter><wait>"
   ]
+
   boot_order           = "disk,cdrom,floppy"
   boot_wait            = "${var.boot_wait}"
   #cd_files             = ["./${var.install_config}"]
   #cd_label             = "OEMDRV"
   cluster              = "${var.cluster}"
+
+  # Used to store VM Templates in a vCenter Content Library
+  # Uncomment this section to use a Content Library
+  #content_library_destination {
+  #  destroy = var.library_vm_destroy
+  #  library = var.content_library_destination
+  #  name = var.template_vm_name
+  #  ovf = var.ovf_template
+  #}
+  
+  # Create Template - set to false if using a content library
   convert_to_template  = "true"
+
   create_snapshot      = "true"
   datacenter           = "${var.datacenter}"
   datastore            = "${var.datastore}"
@@ -36,7 +70,7 @@ source "vsphere-iso" "ubuntu" {
   shutdown_command = "echo 'packer'|sudo -S /sbin/halt -h -p"
   ssh_password     = "${var.ssh_password}"
   ssh_port         = 22
-  ssh_timeout      = "30m"
+  ssh_timeout      = "10m"
   ssh_username     = "${var.ssh_username}"
   storage {
     disk_size             = "${var.disk_size}"
@@ -44,7 +78,8 @@ source "vsphere-iso" "ubuntu" {
   }
   username       = "${var.vsphere_username}"
   vcenter_server = "${var.vcenter_server}"
-  vm_name        = "${var.vm_name}"
+  #vm_name        = "${var.template_vm_name}-${local.timestamp}"
+  vm_name        = "${var.template_vm_name}"
   http_directory = "package/scripts"
 }
 

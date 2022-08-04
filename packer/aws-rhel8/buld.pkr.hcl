@@ -1,10 +1,10 @@
+# Read the documentation for source blocks here:
+# https://www.packer.io/docs/templates/hcl_templates/blocks/source
 
 locals {
     timestamp = regex_replace(timestamp(), "[- TZ:]", "")
 }
 
-# Read the documentation for source blocks here:
-# https://www.packer.io/docs/templates/hcl_templates/blocks/source
 source "amazon-ebs" "aws-rhel" {
     
   ssh_username     = var.ssh_username

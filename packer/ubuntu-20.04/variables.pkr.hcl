@@ -87,17 +87,12 @@ variable "ssh_username" {
     description = "ssh login username for post-install"
 }
 
-variable "vm_name" {
-    type = string
-    description = "name of the vm"
-}
-
 variable "content_library_destination" {
    type = string
    default =   "Images"
 }
 
-variable "template_library_name" {
+variable "template_vm_name" {
     type = string
     description = "name of the vm template"
 }
@@ -105,6 +100,11 @@ variable "template_library_name" {
 variable "library_vm_destroy" {
    type = bool
    default = true
+}
+
+variable "ovf_template" {
+    type = bool
+    default = true
 }
 
 variable "install_config" {

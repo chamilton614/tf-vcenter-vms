@@ -1,6 +1,10 @@
-
 # Read the documentation for source blocks here:
 # https://www.packer.io/docs/templates/hcl_templates/blocks/source
+
+locals {
+    timestamp = regex_replace(timestamp(), "[- TZ:]", "")
+}
+
 source "vsphere-iso" "rhel" {
   CPUs                 = "${var.numvcpus}"
   CPU_hot_plug         = true
@@ -43,7 +47,12 @@ source "vsphere-iso" "rhel" {
   cd_files             = ["./package/scripts/*"]
   cd_label             = "cidata"
   cluster              = "${var.cluster}"
-  convert_to_template  = "true"
+  content_library_destination {
+    destroy = var.library_vm_destroy
+    library = var.content_library_destination
+    name = var.template_library_name
+  }
+  convert_to_template  = "false"
   create_snapshot      = "true"
   datacenter           = "${var.datacenter}"
   datastore            = "${var.datastore}"
@@ -76,7 +85,7 @@ source "vsphere-iso" "rhel" {
   #}
   
   # VM Information
-  vm_name        = var.vm_name
+  vm_name        = "${var.vm_name}-${local.timestamp}"
   # vm_version if unset, defaults to most current VM hardware version supported
   # vm_version = 15
   # Use http_directory if allowing VM to connect to local packer http directory to read scripts
