@@ -1,0 +1,75 @@
+#cloud-config
+# After a manual ubuntu server install the autoinstall user-data file can be found at /var/log/installer/autoinstall-user-data
+autoinstall:
+  version: 1
+  
+  early-commands:
+    - systemctl stop ssh # otherwise packer tries to connect and exceed max attempts
+    #- hostnamectl set-hostname ubuntu # update hostname even for the installer environment
+    #- dhclient # re-register the updated hostname
+  
+  #apt:
+  #  disable_components: []
+  #  geoip: true
+  #  preserve_sources_list: false
+  #  primary:
+  #  - arches:
+  #    - amd64
+  #    - i386
+  #    uri: http://us.archive.ubuntu.com/ubuntu
+  #  - arches:
+  #    - default
+  #    uri: http://ports.ubuntu.com/ubuntu-ports
+  #drivers:
+  #  install: false
+
+  locale: en_US.UTF-8
+
+  #kernel:
+  #  package: linux-generic
+
+  keyboard:
+    layout: us
+    variant: ''
+
+  #network:
+  #  ethernets:
+  #    ens160:
+  #      dhcp4: true
+  #  version: 2
+  
+  ssh:
+    install-server: true
+  
+  identity:
+    hostname: ubuntu
+    username: ubuntu
+    password: $6$MMalY4R8dOAgp1dm$ZiJPpwRpjQDm6cd/dDdFLwMnMuoK5xlsOD7nmcSiUhGgp.H1BPNpwBZYA0xgVL6KM2h67SrWc3zG77Nl/YwRP0 # P@ssw0rd
+  
+  storage:
+    layout:
+      name: lvm
+  
+  #packages: 
+  #  - open-vm-tools
+  #  - git
+  #  - chrony
+  #  - curl
+  #  - vim
+  #  - ifupdown
+  #  - unzip
+  #  - gnupg2
+  #  - software-properties-common
+  #  - apt-transport-https
+  #  - ca-certificates
+  #  - lsb-release
+
+  user-data:
+    disable_root: false
+  
+  #updates: security
+
+  late-commands:
+    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
+  #  - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"/' /target/etc/default/grub
+  #  - curtin in-target --target=/target -- update-grub2
