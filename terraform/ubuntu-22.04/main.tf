@@ -86,8 +86,9 @@ resource "vsphere_virtual_machine" "vm" {
         ipv4_address = var.vm_ip
         ipv4_netmask = var.vm_cidr
       }
-      dns_server_list = [var.name_servers]
+      
       ipv4_gateway = var.default_gw
+      dns_server_list = [var.name_servers]
       */
   #
     }
