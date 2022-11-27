@@ -48,6 +48,10 @@ then
     echo ""
 fi
 
+# Remove Previous Terraform Plugin and State files since this is a new build
+rm -rf .terraform*
+rm -f terraform.*
+
 # Start the Terraform Init Process
 terraform init
 
