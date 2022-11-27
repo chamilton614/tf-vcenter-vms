@@ -18,7 +18,10 @@ domain_name = "home"
 vm_ip = "192.168.2.253"
 vm_cidr = 23
 default_gw = "192.168.2.1"
-name_servers = "192.168.2.2,192.168.2.1"
+name_servers = [
+    "192.168.2.2", 
+    "192.168.2.1"
+]
 
 vcpu_count = 1
 memory = 1024
