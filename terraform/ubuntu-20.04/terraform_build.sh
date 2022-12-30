@@ -63,3 +63,6 @@ terraform apply -auto-approve
 
 # Cleanup
 #${COMMON_SCRIPTS}/cleanup.sh
+
+# Output Date and Time
+date

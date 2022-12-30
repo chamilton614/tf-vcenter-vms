@@ -14,6 +14,11 @@ variable "vsphere_password" {
     sensitive = true
 }
 
+variable "insecure_connection" {
+    type = bool
+    description = "Check to validate vCenter's TLS Certificate"
+}
+
 variable "adminpassword" { 
     description = "Administrator password for windows builds"
 }
@@ -62,8 +67,14 @@ variable "name_servers" {
     description = "DNS Name Servers"
 }
 
-variable "vcpu_count" { 
-    description = "How many vCPUs do you want?"
+variable "num_cpu_sockets" {
+    type = number
+    description = "number of cpu sockets to include"
+}
+
+variable "num_cpu_cores" {
+    type = number
+    description = "number of cpu cores to include"
 }
 
 variable "memory" { 

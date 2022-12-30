@@ -42,7 +42,7 @@ autoinstall:
     install-server: true
     allow-pw: yes
     authorized-keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAv2OBqgs4FH02ImzEhiWYFebvl6BcxLjpeHaSuBBM2I ubuntu
+      - ${ssh_public_key}
   
   identity:
     hostname: ubuntu

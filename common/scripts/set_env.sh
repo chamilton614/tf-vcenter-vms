@@ -12,3 +12,8 @@ TERRAFORM_PATH=/c/Files/development/terraform
 ISO_TOOL=mkisofs
 ISO_TOOL_FILE=mkisofs-2.01.zip
 
+# Terraform Troubleshooting Variables - USE WITH CAUTION
+#VSPHERE_CLIENT_DEBUG=true
+#VSPHERE_CLIENT_DEBUG_PATH=$(pwd)/.govmomi
+#VSPHERE_CLIENT_DEBUG_PATH_RUN=RUN
+

@@ -46,7 +46,8 @@ resource "vsphere_virtual_machine" "vm" {
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
 
-  num_cpus = var.vcpu_count
+  num_cpus             = var.num_cpu_sockets
+  num_cores_per_socket = var.num_cpu_cores
   memory   = var.memory
   guest_id = data.vsphere_virtual_machine.template.guest_id
 
@@ -90,7 +91,7 @@ resource "vsphere_virtual_machine" "vm" {
       ipv4_gateway = var.default_gw
       dns_server_list = [var.name_servers]
       */
-  #
+      
     }
 
   }

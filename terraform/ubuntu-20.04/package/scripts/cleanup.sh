@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
-echo "This is me cleaning up after myself"
+echo "cleanup.sh"
+
+# Output Date and Time
+date
+
+echo "Do Something"
+
+# Output Date and Time
+date

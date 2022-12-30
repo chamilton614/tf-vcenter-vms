@@ -1,0 +1,1 @@
+default ansible_host=ansible_tmp_host ansible_user=ansible_tmp_user ansible_port=22
