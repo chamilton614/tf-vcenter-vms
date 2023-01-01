@@ -8,7 +8,8 @@ guest_ip.txt
 id_ed25519*
 
 # Ansible files
-inventory.ini*
+inventory.ini
+inventory.ini-e
 _inventory.ini*
 ansible.cfg*
 _ansible.cfg*

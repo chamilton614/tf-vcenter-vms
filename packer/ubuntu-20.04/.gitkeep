@@ -1,1 +1,10 @@
- 
+#Ansible config creator
+ansible.cfg.pkrtpl.hcl
+
+#Ansible inventory file creator
+inventory.ini.pkrtpl.hcl
+create_ansible_inventory_ini.sh
+
+#Ubuntu user-data creator
+user-data.pkrtpl.hcl
+
