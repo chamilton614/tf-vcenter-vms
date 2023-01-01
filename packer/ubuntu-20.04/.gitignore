@@ -1,1 +1,17 @@
+# Do not include packer-log
+packer-log
+
+# Do not include temporary build files
+guest_ip.txt
  
+# SSH Keys
+id_ed25519*
+
+# Ansible files
+inventory.ini*
+_inventory.ini*
+ansible.cfg*
+_ansible.cfg*
+
+# Ubuntu User-Data
+user-data

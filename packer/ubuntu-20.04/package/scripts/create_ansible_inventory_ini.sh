@@ -21,10 +21,6 @@ cp ${ansible_inv_template_file} ${ansible_inv_file}
 #Get the IP from the Guest IP file
 ansible_inv_host=$(cat ${ansible_inv_host_file})
 
-#Replace default
-echo "sed -i'' -e 's/default/${ansible_inv_host}/g' ${ansible_inv_file}"
-sed -i'' -e "s/default/${ansible_inv_host}/g" "${ansible_inv_file}"
-
 #Replace HOST
 echo "sed -i'' -e 's/ansible_tmp_host/${ansible_inv_host}/g' ${ansible_inv_file}"
 sed -i'' -e "s/ansible_tmp_host/${ansible_inv_host}/g" "${ansible_inv_file}"
@@ -32,6 +28,10 @@ sed -i'' -e "s/ansible_tmp_host/${ansible_inv_host}/g" "${ansible_inv_file}"
 #Replace USER
 echo "sed -i'' -e 's/ansible_tmp_user/${ansible_inv_user}/g' ${ansible_inv_file}"
 sed -i'' -e "s/ansible_tmp_user/${ansible_inv_user}/g" ${ansible_inv_file}
+
+#Replace PASSWORD
+echo "sed -i'' -e 's/ansible_tmp_password/${ansible_inv_password}/g' ${ansible_inv_file}"
+sed -i'' -e "s/ansible_tmp_password/${ansible_inv_password}/g" ${ansible_inv_file}
 
 # Output Date and Time
 date
