@@ -19,7 +19,7 @@ echo "cp ${ansible_inv_template_file} ${ansible_inv_file}"
 cp ${ansible_inv_template_file} ${ansible_inv_file}
 
 #Get the IP from the Guest IP file
-ansible_inv_host=$(cat ${ansible_inv_host_file})
+ansible_inv_host=$(cat ${ansible_inv_guest_file})
 
 #Replace HOST
 echo "sed -i'' -e 's/ansible_tmp_host/${ansible_inv_host}/g' ${ansible_inv_file}"

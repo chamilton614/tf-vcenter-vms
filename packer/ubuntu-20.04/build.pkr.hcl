@@ -168,7 +168,7 @@ build {
     environment_vars = [
       "ansible_inv_template_file=${var.scripts_directory}/inventory.ini.pkrtpl.hcl",
       "ansible_inv_file=${var.scripts_directory}/inventory.ini",
-      "ansible_inv_host_file=${var.scripts_directory}/guest_ip.txt",
+      "ansible_inv_guest_file=${var.scripts_directory}/guest_ip.txt",
       "ansible_inv_user=${var.ssh_username}",
       "ansible_inv_password=${var.ssh_password}",
     ]
