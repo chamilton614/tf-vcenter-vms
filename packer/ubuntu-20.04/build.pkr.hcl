@@ -178,34 +178,48 @@ build {
   }
 
   #Ansible Bootstrap
-  provisioner "ansible" {
-    command = "ansible-playbook"
-    playbook_file = "${var.scripts_directory}/bootstrap.yaml"
-    ansible_env_vars = [
-      "ANSIBLE_CONFIG=${var.scripts_directory}/ansible.cfg",
-      "ANSIBLE_HOST_KEY_CHECKING=False"
-    ]
-    extra_arguments = [
-    #  "-e ansible_ssh_private_key_file=${local.ssh_private_key_file}",
-      "-vvvv",
-      #"--extra-vars ansible_python_interpreter=/usr/local/bin/python3",
-      "--extra-vars ansible_ssh_password=${var.ssh_password}",
-    ]
-    user = var.ssh_username
-    #user = "chamilton"
-    #inventory_directory = var.launch_home
-    #inventory_file_template = "{{ .HostAlias }} ansible_host={{ .Host }} ansible_user={{ .User }} ansible_port={{ .Port }}\n"
-    #inventory_file_template = "controller ansible_host={{ .Host }} ansible_user=${var.ssh_username} ansible_port=22\n"
-    inventory_file = "${var.scripts_directory}/inventory.ini"
-    #keep_inventory_file = true
-    #ssh_authorized_key_file = local.ssh_public_key_file
-    use_proxy = false
-    #max_retries = 2
-    #ansible_ssh_extra_args = [
-    #  "-o PasswordAuthentication=yes" ,
-    #  "-o IdentitiesOnly=no"
+  #provisioner "ansible" {
+  #  command = "ansible-playbook"
+  #  playbook_file = "${var.scripts_directory}/bootstrap.yaml"
+  #  ansible_env_vars = [
+  #    "ANSIBLE_CONFIG=${var.scripts_directory}/ansible.cfg",
+  #    "ANSIBLE_HOST_KEY_CHECKING=False"
+  #  ]
+  #  extra_arguments = [
+  #  #  "-e ansible_ssh_private_key_file=${local.ssh_private_key_file}",
+  #    "-vvvv",
+  #    #"--extra-vars ansible_python_interpreter=/usr/local/bin/python3",
+  #    "--extra-vars ansible_ssh_password=${var.ssh_password}",
+  #  ]
+  #  user = var.ssh_username
+  #  #user = "chamilton"
+  #  #inventory_directory = var.launch_home
+  #  #inventory_file_template = "{{ .HostAlias }} ansible_host={{ .Host }} ansible_user={{ .User }} ansible_port={{ .Port }}\n"
+  #  #inventory_file_template = "controller ansible_host={{ .Host }} ansible_user=${var.ssh_username} ansible_port=22\n"
+  #  inventory_file = "${var.scripts_directory}/inventory.ini"
+  #  #keep_inventory_file = true
+  #  #ssh_authorized_key_file = local.ssh_public_key_file
+  #  use_proxy = false
+  #  #max_retries = 2
+  #  #ansible_ssh_extra_args = [
+  #  #  "-o PasswordAuthentication=yes" ,
+  #  #  "-o IdentitiesOnly=no"
+  #  #]
+  #}
+
+  #Ansible Bootstrap
+  provisioner "shell-local" {
+    #environment_vars = [
+    # "ansible_inv_file=${var.scripts_directory}/inventory.ini",
+    # "ansible_inv_guest_file=${var.scripts_directory}/guest_ip.txt",
+    # "ansible_inv_user=${var.ssh_username}",
+    # "ansible_inv_password=${var.ssh_password}",
     #]
+    execute_command = ["bash", "-c", "{{.Vars}} {{.Script}}"]
+    #use_linux_pathing = true
+    script = "${var.scripts_directory}/ansible_bootstrap.sh" 
   }
+
   #Execute Cleanup
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
