@@ -1,6 +1,6 @@
 ---
 
-- hosts: master
+- hosts: servers
   become: true
   pre_tasks:
 
@@ -19,7 +19,7 @@
     when: ansible_distribution == "Ubuntu"
 
 
-- hosts: master
+- hosts: servers
   become: true
   tasks:
 
