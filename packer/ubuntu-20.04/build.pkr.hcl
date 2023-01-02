@@ -130,27 +130,6 @@ build {
     #"source.null.example1",
   ]
 
-  #Execute Additional Package scripts
-  #provisioner "shell" {
-  #  execute_command = "echo '${var.ssh_password}' | {{.Vars}} sudo -S -E bash -eux '{{ .Path }}'" # This runs the scripts with sudo
-  #  scripts = [
-  #    "${var.scripts_directory}/package_updates.sh",
-  #    "${var.scripts_directory}/cockpit.sh"
-  #  ]
-  #}
-
-  #Final Customizations
-  #provisioner "ansible-local" {
-  #  playbook_file = "${var.scripts_directory}/setup.yml"
-  #}
-
-  #Shell Local Provisioner
-  #provisioner "shell-local" {
-  #  environment_vars = [
-  #  ]
-  #  script = "${var.scripts_directory}/ansible-bootstrap.sh"
-  #}
-  
   #Execute Remote Shell to get the Guest Build IP Address since the Template Variables do not work
   provisioner "shell" {
     inline = ["ip -4 -o a|cut -d' ' -f2,7|cut -d'/' -f1|grep et|cut -d' ' -f2> /tmp/guest_ip.txt"]
@@ -177,44 +156,13 @@ build {
     script = "${var.scripts_directory}/create_ansible_inventory_ini.sh"
   }
 
-  #Ansible Bootstrap
-  #provisioner "ansible" {
-  #  command = "ansible-playbook"
-  #  playbook_file = "${var.scripts_directory}/bootstrap.yaml"
-  #  ansible_env_vars = [
-  #    "ANSIBLE_CONFIG=${var.scripts_directory}/ansible.cfg",
-  #    "ANSIBLE_HOST_KEY_CHECKING=False"
-  #  ]
-  #  extra_arguments = [
-  #  #  "-e ansible_ssh_private_key_file=${local.ssh_private_key_file}",
-  #    "-vvvv",
-  #    #"--extra-vars ansible_python_interpreter=/usr/local/bin/python3",
-  #    "--extra-vars ansible_ssh_password=${var.ssh_password}",
-  #  ]
-  #  user = var.ssh_username
-  #  #user = "chamilton"
-  #  #inventory_directory = var.launch_home
-  #  #inventory_file_template = "{{ .HostAlias }} ansible_host={{ .Host }} ansible_user={{ .User }} ansible_port={{ .Port }}\n"
-  #  #inventory_file_template = "controller ansible_host={{ .Host }} ansible_user=${var.ssh_username} ansible_port=22\n"
-  #  inventory_file = "${var.scripts_directory}/inventory.ini"
-  #  #keep_inventory_file = true
-  #  #ssh_authorized_key_file = local.ssh_public_key_file
-  #  use_proxy = false
-  #  #max_retries = 2
-  #  #ansible_ssh_extra_args = [
-  #  #  "-o PasswordAuthentication=yes" ,
-  #  #  "-o IdentitiesOnly=no"
-  #  #]
-  #}
-
-  #Ansible Bootstrap
+  #Ansible Bootstrap using shell-local
+  #Used this provisioner because the ansible provisioner always wanted to use ssh keys to connect even with custom options it never worked
+  #This solution was much easier and cleaner to get the initial bootstrapping done so the node could be managed or at least ready to be. 
   provisioner "shell-local" {
-    #environment_vars = [
-    # "ansible_inv_file=${var.scripts_directory}/inventory.ini",
-    # "ansible_inv_guest_file=${var.scripts_directory}/guest_ip.txt",
-    # "ansible_inv_user=${var.ssh_username}",
-    # "ansible_inv_password=${var.ssh_password}",
-    #]
+    environment_vars = [
+     "ansible_bootstrap_file=bootstrap.yaml",
+    ]
     execute_command = ["bash", "-c", "{{.Vars}} {{.Script}}"]
     #use_linux_pathing = true
     script = "${var.scripts_directory}/ansible_bootstrap.sh" 

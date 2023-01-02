@@ -40,9 +40,7 @@ autoinstall:
   
   ssh:
     install-server: true
-    allow-pw: yes
-    #authorized-keys:
-    #  - ${ssh_public_key}
+    allow-pw: yes    
   
   identity:
     hostname: ubuntu

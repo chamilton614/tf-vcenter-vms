@@ -53,6 +53,11 @@ fi
 export PACKER_CACHE_DIR=${LAUNCH_DIR}/packer_cache
 
 # Packer Debug Logging
+if [ -e ${LAUNCH_DIR}/packer-log ]
+then
+    echo 'Removing Packer Log'
+    rm -f ${LAUNCH_DIR}/packer-log
+fi
 export PACKER_LOG=1
 export PACKER_LOG_PATH=${LAUNCH_DIR}/packer-log
 
