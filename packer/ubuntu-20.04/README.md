@@ -1,7 +1,7 @@
 # Ubuntu 20.04
 The files in this folder will be used to create a packer template for the titled OS.  The packer related files have been broken out separately so a user can understand how these work together to create the template.  Each packer file has been properly named by the extensions so they can be easily recognized by packer.  For example, the variables.auto.pkrvars.hcl tells Packer that these variables should be loaded with these values.
 
-The collection of files will create the following template:
+The following template will be created:
  - Ubuntu 20.04
 
 Requirements:
