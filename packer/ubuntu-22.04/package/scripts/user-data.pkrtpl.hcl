@@ -40,36 +40,47 @@ autoinstall:
   
   ssh:
     install-server: true
+    allow-pw: yes    
   
   identity:
     hostname: ubuntu
     username: ubuntu
-    password: $6$MMalY4R8dOAgp1dm$ZiJPpwRpjQDm6cd/dDdFLwMnMuoK5xlsOD7nmcSiUhGgp.H1BPNpwBZYA0xgVL6KM2h67SrWc3zG77Nl/YwRP0 # P@ssw0rd
+    password: $6$iIGXbSTjejANoagR$kMbEyNj8qN/qrg9Y5VzUI8w/SylGhVXdLfrQHzuwpjPRc6c09bKEM7QBhZ13LHsfbA4E.WVJlxLilCyAWP6F01 # P@ssw0rd
   
   storage:
     layout:
-      name: lvm
+        name: lvm
   
-  #packages: 
-  #  - open-vm-tools
-  #  - git
-  #  - chrony
-  #  - curl
-  #  - vim
-  #  - ifupdown
-  #  - unzip
-  #  - gnupg2
-  #  - software-properties-common
-  #  - apt-transport-https
-  #  - ca-certificates
-  #  - lsb-release
+  packages: 
+    - open-vm-tools
+    - openssh-server
+    - net-tools
+    - perl
+    - open-iscsi
+    - ntp
+    - git
+    - chrony
+    - curl
+    - vim
+    - ifupdown
+    - zip
+    - unzip
+    - gnupg2
+    - software-properties-common
+    - apt-transport-https
+    - ca-certificates
+    - lsb-release
+    - python3-pip
+    - jq
+    - cloud-init
 
   user-data:
-    disable_root: false
+      disable_root: false
   
   #updates: security
 
   late-commands:
-    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
-  #  - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"/' /target/etc/default/grub
-  #  - curtin in-target --target=/target -- update-grub2
+      - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
+  #   - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"/' /target/etc/default/grub
+  #   - curtin in-target --target=/target -- update-grub2
+      - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/ubuntu

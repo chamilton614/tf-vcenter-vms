@@ -6,16 +6,17 @@ clear
 # Export the variables to make them available to scripts
 set -a
 
-# Set the Script Dir
-SCRIPT_PATH=`readlink -f "$0"`
-SCRIPT_DIR=`dirname "$SCRIPT_PATH"`
-#echo "SCRIPT_DIR = $SCRIPT_DIR"
+# Set the Script Launch Dir
+LAUNCH_PATH=`readlink -f "$0"`
+LAUNCH_DIR=`dirname "$LAUNCH_PATH"`
+#echo "LAUNCH_DIR = $LAUNCH_DIR"
+#read x
 
 # Set the Common Bin Dir
-COMMON_BIN=${SCRIPT_DIR}/../../common/bin
+COMMON_BIN=${LAUNCH_DIR}/../../common/bin
 
 # Set the Common Scripts Dir
-COMMON_SCRIPTS=${SCRIPT_DIR}/../../common/scripts
+COMMON_SCRIPTS=${LAUNCH_DIR}/../../common/scripts
 
 # Set the Environment
 source ${COMMON_SCRIPTS}/set_env.sh
@@ -48,11 +49,30 @@ then
     echo ""
 fi
 
+# Packer Cache Directory
+export PACKER_CACHE_DIR=${LAUNCH_DIR}/packer_cache
+
+# Packer Debug Logging
+if [ -e ${LAUNCH_DIR}/packer-log ]
+then
+    echo 'Removing Packer Log'
+    rm -f ${LAUNCH_DIR}/packer-log
+fi
+export PACKER_LOG=1
+export PACKER_LOG_PATH=${LAUNCH_DIR}/packer-log
+
+# Output Date and Time
+date
+
 # Start the Packer Init Process
 packer init .
 
 # Start the Packer Build Process
-packer build -force .
+packer build -only='prebuild.*' -force -on-error=ask .
+packer build -only='linux.*' -force -on-error=ask .
 
 # Cleanup
 ${COMMON_SCRIPTS}/cleanup.sh
+
+# Output Date and Time
+date
