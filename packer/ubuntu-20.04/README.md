@@ -14,8 +14,9 @@ Requirements:
 
 Quick Start:
 1. Clone this Repo
-2. Update variables.auto.pkrvars.hcl as needed
-3. Run packer_build.sh
+2. Browse to packer/ubuntu-20.04
+3. Update variables.auto.pkrvars.hcl as needed
+4. Run packer_build.sh
 
 Testing:
  - These scripts have been tested with Packer 1.8.5 from a Ubuntu Desktop running version 20.04 and from a MacBook running Ventura 13.1
