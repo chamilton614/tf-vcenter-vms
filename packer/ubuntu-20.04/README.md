@@ -6,6 +6,8 @@ The following template will be created:
 
 Requirements:
  - Linux System to run these scripts
+ - Min. Python 3.8.10 installed
+ - Min. Ansible 2.12.10 installed
  - Min. Packer 1.8.5 installed
  - This Repo cloned locally
  - User Credentials to vSphere that can create VM Templates
