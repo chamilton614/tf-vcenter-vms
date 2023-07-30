@@ -2,8 +2,8 @@
 #https://github.com/jonhowe/Virtjunkie.com/tree/master/Terraform
 
 vsphere_server = "vcenter01.home"
-vsphere_user = "administrator@vcenter01.home"
-vsphere_password = "P@ssw0rd"
+#vsphere_user = "administrator@vcenter01.home"
+#vsphere_password = "P@ssw0rd"
 
 adminpassword = "packer" 
 datacenter = "Datacenter"
@@ -11,7 +11,7 @@ datastore = "datastore2"
 cluster = "Cluster"
 network = "Non-OCP" 
 
-template_name = "tpl_rhel8"
+template_name = "pkr_tmpl_rhel8"
 vm_name = "rhel8test" 
 domain_name = "local"
 #Ignored the following 4 lines if DHCP used

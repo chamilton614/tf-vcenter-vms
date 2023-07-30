@@ -47,13 +47,13 @@ source "vsphere-iso" "rhel" {
   cd_files             = ["./package/scripts/*"]
   cd_label             = "cidata"
   cluster              = "${var.cluster}"
-  content_library_destination {
-    destroy = var.library_vm_destroy
-    library = var.content_library_destination
-    name = var.template_library_name
-  }
-  convert_to_template  = "false"
-  create_snapshot      = "true"
+  #content_library_destination {
+  #  destroy = var.library_vm_destroy
+  #  library = var.content_library_destination
+  #  name = var.template_library_name
+  #}
+  convert_to_template  = "true"
+  create_snapshot      = "false"
   datacenter           = "${var.datacenter}"
   datastore            = "${var.datastore}"
   folder               = "${var.folder}"

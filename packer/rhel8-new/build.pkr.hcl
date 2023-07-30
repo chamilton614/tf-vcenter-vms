@@ -8,6 +8,7 @@ data "sshkey" "install" {
 
 locals {
   buildtime = formatdate("YYYY-MM-DD hh:mm ZZZ", timestamp())
+  serverbuildtime = formatdate("YYYYMMDDhhmmss", timestamp())
   packer_cache = var.packer_cache
   ssh_public_key = data.sshkey.install.public_key
   ssh_public_key_file = "${var.scripts_directory}/id_ed25519_${var.ssh_username}.pub"
@@ -26,10 +27,11 @@ source "file" "ssh-private-key-file" {
 }
 
 source "file" "install-config-file" {
-  content = templatefile("${var.scripts_directory}/user-data.pkrtpl.hcl", {
-    ssh_public_key = local.ssh_public_key
+  content = templatefile("${var.scripts_directory}/ks-cfg.pkrtpl.hcl", {
+    ssh_public_key = local.ssh_public_key,
+    serverbuildtime = local.serverbuildtime
   })
-  target = "${var.scripts_directory}/user-data"
+  target = "${var.scripts_directory}/ks.cfg"
 }
 
 source "file" "install-ansible-config-file" {
@@ -43,7 +45,7 @@ source "file" "install-ansible-config-file" {
 #  communicator = "none"
 #}
 
-source "vsphere-iso" "ubuntu" {
+source "vsphere-iso" "centos-stream" {
   CPUs                 = var.num_cpu_sockets
   cpu_cores            = var.num_cpu_cores
   CPU_hot_plug         = false
@@ -51,9 +53,9 @@ source "vsphere-iso" "ubuntu" {
   RAM_hot_plug         = false
   RAM_reserve_all      = false
   boot_command         = [
-    "<enter><enter><f6><esc><wait> ",
-    "autoinstall net.ifnames=0 biosdevname=0 ip=dhcp ds=nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ",
-    "<enter>"
+    #"<tab> inst.text inst.ks=cdrom:/dev/sr1:/${var.install_config} <enter>"
+    # Workaround to use Packer as a local webserver since RHEL8 removed Floppy drivers, could use CD paths but this works easily
+    "<up><wait><tab><wait> inst.text inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter><wait>"
   ]
   boot_order           = "disk,cdrom,floppy"
   boot_wait            = var.boot_wait
@@ -126,7 +128,7 @@ build {
   # "buildname.amazon-ebs.example-1" and "buildname.amazon-ebs.example-2"
   name = "linux"
   sources = [
-    "source.vsphere-iso.ubuntu",
+    "source.vsphere-iso.centos-stream",
     #"source.null.example1",
   ]
 

@@ -9,18 +9,18 @@ vsphere_server                 = "vcenter01.home"
 #vsphere_password              = ""
 insecure_connection            = true
 datastore                      = "datastore2"
-host                           = "esxhost01.home"
+#host                           = "esxhost01.home"
 datacenter                     = "Datacenter"
-folder                         = "Templates"
+#folder                         = "Templates"
 cluster                        = "Cluster"
 
 # Virtual Machine Variables
 adminpassword                  = "P@ssw0rd"
-network                        = "Non-OCP" 
+network                        = "DSwitch 1-Non-OCP" 
 
 template_name                  = "pkr_tmpl_ubuntu2004_100GB"
 vm_name                        = "ubuntu2004" 
-domain_name                    = "home"
+domain_name                    = "home.telysian.com"
 
 #Ignored the following 4 lines if DHCP used
 vm_ip                          = "192.168.2.253"

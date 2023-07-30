@@ -1,0 +1,137 @@
+Build VM
+
+Steps to Register to Red Hat and Update
+1. Login as a user and switch to root or perform all commands below with sudo access
+2. subscription-manager register --auto-attach
+3. Enter RH Username and Password #Make sure your username is not an email address - login via a browser to find your username
+4. Verify the following screen displays:
+    The system has been registered with ID: ....
+    The registered system name is: ....
+    Installed Product Current Status:
+    Product Name: Red Hat Enterprise Linux for x86_64
+    Status: Subscribed
+
+5. yum repolist #To see what repos are currently installed and available
+6. yum update -y
+7. reboot
+
+#Install Python 3 versions
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_basic_system_settings/assembly_installing-and-using-python_configuring-basic-system-settings
+
+Install python 3.6 - yum install -y python3
+Install python 3.8 - yum install -y python38
+Install python 3.9 - yum install -y python39
+
+alternatives --set python /usr/bin/python3.9
+
+python -V
+
+yum install -y python39-requests
+yum install -y python39-devel
+yum update -y
+
+- Update .bashrc for pip - alias pip='/bin/pip3.9'
+source .bashrc
+
+yum install -y openssl-devel
+
+
+#Create image-builder user
+As root: adduser image-builder
+passwd image-builder
+
+#Add image-builder to sudo group
+As root: usermod -aG wheel image-builder
+
+#Install Ansible
+https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html
+As root: python -m pip install --user ansible
+-Update .bash_profile for /usr/bin, /usr/local/bin, $HOME/.local/bin
+source .bash_profile
+ansible --version
+
+As image-builder: python -m pip install --user ansible
+-Update .bashrc for /usr/bin, /usr/local/bin, $HOME/.local/bin
+- Update .bashrc for pip - alias pip='/bin/pip3.9'
+source .bashrc
+ansible --version
+
+python -m pip install --upgrade pip
+
+#Install additional packages and configurations
+As root: yum install -y jq unzip make
+dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+dnf upgrade -y
+yum update -y
+yum install -y snapd
+systemctl enable --now snapd.socket
+ln -s /var/lib/snapd/snap /snap
+reboot
+snap install yq
+wget https://anywhere-assets.eks.amazonaws.com/releases/bundles/29/artifacts/image-builder/0.1.2/image-builder-linux-amd64.tar.gz
+tar xvf image-builder*.tar.gz
+cp image-builder /usr/local/bin
+curl -L -o - "https://github.com/vmware/govmomi/releases/latest/download/govc_$(uname -s)_$(uname -m).tar.gz" | tar -C /usr/local/bin -xvzf - govc
+
+#Install Packer and Terraform
+As root: yum install -y yum-utils
+yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+yum -y install terraform
+yum -y install packer
+- Update .bashrc for packer binary - alias packer='/bin/packer'
+source .bashrc
+
+
+9. Stop and Disable the Firewall
+systemctl stop firewalld
+systemctl disable firewalld 
+
+10. Do not create SSH and config - it will create automatically
+#mkdir -p /home/$USER/.ssh
+#echo "HostKeyAlgorithms +ssh-rsa" >> /home/$USER/.ssh/config
+#echo "PubkeyAcceptedKeyTypes +ssh-rsa" >> /home/$USER/.ssh/config
+
+11. vim vsphere-connection.json
+
+{
+  "cluster": "Cluster",
+  "convert_to_template": "false",
+  "create_snapshot": "false",
+  "datacenter": "Datacenter",
+  "datastore": "datastore2",
+  "folder": "/Templates",
+  "insecure_connection": "true",
+  "linked_clone": "false",
+  "network": "Non-OCP",
+  "password": "P@ssw0rd",
+  "resource_pool": "",
+  "username": "administrator@vsphere.local",
+  "vcenter_server": "vcenter01.home",
+  "vsphere_library_name": "Library",
+  "iso_url": "http://192.168.2.7:8080/ignition/rhel-8.7-x86_64-dvd.iso",
+  "iso_checksum": "a6a7418a75d721cc696d3cbdd648b5248808e7fef0f8742f518e43b46fa08139",
+  "iso_checksum_type": "sha256",
+  "rhel_username": "chamilton1",
+  "rhel_password": "31saStud31",
+  "osFamily": "redhat",
+  "template": "EKSA-1.25-RHEL8"
+}
+
+12. Set GOVC Variables
+export GOVC_USERNAME=
+export GOVC_PASSWORD=
+export GOVC_URL=<IP or FQDN>
+
+13. Get the GOVC Thumbprint
+govc about.cert -thumbprint -k
+
+14. Run the Image-Builder
+image-builder build --os redhat --hypervisor vsphere --release-channel 1-25 --vsphere-config vsphere-connection.json 2>&1 | tee -a image-builder-vsphere.log
+
+
+https://developers.redhat.com/content-gateway/file/rhel/8.7.0/rhel-8.7-x86_64-dvd.iso
+
+https://access.cdn.redhat.com/content/origin/files/sha256/a6/a6a7418a75d721cc696d3cbdd648b5248808e7fef0f8742f518e43b46fa08139/rhel-8.7-x86_64-dvd.iso?_auth_=1679236074_a855916ed4c17991e75ac155ef8c58b7
+
+/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi
+packer build -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/config/kubernetes.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/config/cni.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/config/containerd.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/config/ansible-args.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/config/goss-args.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/config/common.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/config/additional_components.json"  -force -color=true  -var-file="packer/ova/packer-common.json" -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/image-builder/images/capi/packer/ova/rhel-8.json" -var-file="packer/ova/vsphere.json"  -except=local -only=vsphere-iso -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/_output/1-24/ova/ubuntu/config/kubernetes.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/_output/1-24/ova/ubuntu/config/common.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/_output/1-24/ova/ubuntu/config/cni.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/_output/1-24/ova/ubuntu/config/additional_components.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/packer/ova/vsphere-library.json"  -var-file="/home/image-builder/eks-anywhere-build-tooling/projects/kubernetes-sigs/image-builder/packer/ova/vsphere.json"  -only=vsphere packer/ova/packer-node.json

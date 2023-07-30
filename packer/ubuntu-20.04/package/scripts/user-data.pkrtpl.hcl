@@ -4,7 +4,9 @@ autoinstall:
   version: 1
   
   early-commands:
-    - systemctl stop ssh # otherwise packer tries to connect and exceed max attempts
+    # otherwise packer tries to connect and exceed max attempts
+    - systemctl stop ssh.service
+    - systemctl stop ssh.socket
     #- hostnamectl set-hostname ubuntu # update hostname even for the installer environment
     #- dhclient # re-register the updated hostname
   
@@ -43,7 +45,7 @@ autoinstall:
     allow-pw: yes    
   
   identity:
-    hostname: ubuntu
+    hostname: ubuntu-server
     username: ubuntu
     password: $6$iIGXbSTjejANoagR$kMbEyNj8qN/qrg9Y5VzUI8w/SylGhVXdLfrQHzuwpjPRc6c09bKEM7QBhZ13LHsfbA4E.WVJlxLilCyAWP6F01 # P@ssw0rd
   
@@ -80,6 +82,7 @@ autoinstall:
   #updates: security
 
   late-commands:
+      - 'sed -i "s/dhcp4: true/&\n      dhcp-identifier: mac/" /target/etc/netplan/00-installer-config.yaml'
       - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/ubuntu
   #   - sed -ie 's/GRUB_CMDLINE_LINUX=.*/GRUB_CMDLINE_LINUX="net.ifnames=0 biosdevname=0"/' /target/etc/default/grub
   #   - curtin in-target --target=/target -- update-grub2
